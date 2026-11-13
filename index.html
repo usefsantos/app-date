@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>بوابة التحقق</title>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #ffffff;
+            font-family: Tahoma, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            text-align: center;
+            border: 2px solid #38bdf8;
+            max-width: 380px;
+            width: 90%;
+        }
+        /* تنسيق اللوجو الدائري */
+        .logo-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px auto;
+            display: block;
+            border: 2px solid #38bdf8;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+        }
+        h2 {
+            font-size: 18px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+        h1 {
+            font-size: 24px;
+            letter-spacing: 1px;
+            color: #38bdf8;
+            margin: 15px 0;
+        }
+        p {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+        .timer {
+            color: #f43f5e;
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+        .btn-whatsapp {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 12px 20px;
+            background-color: #25D366;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 8px;
+            font-size: 13px;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+            transition: background-color 0.2s;
+        }
+        .btn-whatsapp:hover {
+            background-color: #1da851;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <!-- اللوجو img.jpg -->
+        <img src="img.jpg" alt="Logo" class="logo-img">
+        
+        <h2>مدة الاستخدام الخاصة بك</h2>
+        <h1 id="codeBox">حساب مفعل</h1>
+        <div class="timer" id="timerBox">الوقت الحالي لديك: -- يوم -- ساعة -- دقيقة -- ثانية</div>
+        <p id="msgBox">⚠️ مدة التفعيل صالحة لمدة 3 شهور فقط.</p>
+
+        <a href="https://wa.me/+201023326791" target="_blank" class="btn-whatsapp">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+            </svg>
+            تواصل مع المطور لشراء مدة مرة أخرى
+        </a>
+    </div>
+
+    <script>
+        // تحديد تاريخ انتهاء العد التنازلي (بعد 90 يوماً / 3 شهور)
+        let targetTime = localStorage.getItem("targetExpiryTime");
+        if (!targetTime) {
+            targetTime = new Date().getTime() + (90 * 24 * 60 * 60 * 1000);
+            localStorage.setItem("targetExpiryTime", targetTime);
+        }
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const distance = targetTime - now;
+
+            if (distance < 0) {
+                document.getElementById("timerBox").innerText = "انتهت مدة التفعيل!";
+                document.getElementById("codeBox").innerText = "منتهي الصلاحية";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("timerBox").innerText = `الوقت الحالي لديك: ${days} يوم ${hours} س ${minutes} د ${seconds} ث`;
+        }
+
+        updateTimer();
+        setInterval(updateTimer, 1000);
+    </script>
+</body>
+</html>
